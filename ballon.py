@@ -5,6 +5,7 @@ FPS = 60
 dt = 1 / FPS
 pyxel.init(180, 120, fps=FPS)
 pyxel.load("./assets/ballon.pyxres")
+pyxel.play(0, [0, 0], loop=True)
 
 sp = Space()
  
