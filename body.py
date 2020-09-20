@@ -48,6 +48,18 @@ class Rect(Body):
     def draw(self):
         pyxel.rect(self.position_x, self.position_y, self.width, self.height, self.color)
 
+class Sprite(Body):
+    def __init__(self, width, height, img, img_x, img_y, color_bkg, *args, **kwargs):
+        self.width = width
+        self.height = height
+        self.img = img
+        self.img_x = img_x
+        self.img_y = img_y
+        self.color_bkg = color_bkg
+        super().__init__(*args, **kwargs)
+    
+    def draw(self):
+        pyxel.blt(self.position_x, self.position_y, self.img, self.img_x, self.img_y, self.width, self.height, self.color_bkg)
 
 class Space:
     def __init__(self):
@@ -65,6 +77,11 @@ class Space:
         rect = Rect(*args, **kwargs)
         self.add_body(rect)
         return rect
+
+    def add_sprite(self, *args, **kwargs):
+        sprite = Sprite(*args, **kwargs)
+        self.add_body(sprite)
+        return sprite
  
     def update(self, dt):
         for body in self.bodies:

@@ -4,23 +4,41 @@ from body import *
 FPS = 60
 dt = 1 / FPS
 pyxel.init(180, 120, fps=FPS)
- 
+pyxel.load("./assets/ballon.pyxres")
+
 sp = Space()
  
-ballon = sp.add_rect(
-    width=6,
-    height=30,
-    pos=(0, 90),
+sky = sp.add_sprite(
+    img=1,
+    img_x=0,
+    img_y=0,
+    width=180,
+    height=120,
+    color_bkg = pyxel.COLOR_BLACK,
+    pos=(0, 0),
     vel=(0,0),
-    color=pyxel.COLOR_RED,
 )
 
-mountain = sp.add_rect(
-    width=40,
-    height=50,
+ballon = sp.add_sprite(
+    img=0,
+    img_x=2,
+    img_y=0,
+    width=13,
+    height=16,
+    color_bkg = pyxel.COLOR_BLACK,
+    pos=(0, 103),
+    vel=(0,0),
+)
+
+mountain = sp.add_sprite(
+    img=0,
+    img_x=0,
+    img_y=16,
+    width=63,
+    height=32,
+    color_bkg = pyxel.COLOR_BLACK,
     pos=(60, 90),
     vel=(0,0),
-    color=pyxel.COLOR_GREEN,
 )
 
 force = 0
@@ -44,6 +62,7 @@ def ballon_control():
        pyxel.btn(pyxel.KEY_DOWN) or  
        pyxel.btn(pyxel.KEY_LEFT) or 
        pyxel.btn(pyxel.KEY_RIGHT)):
+        
         force += 1
 
     #  Apply force based on the arrow key
@@ -70,20 +89,25 @@ def ballon_control():
 
         ballon.apply_force(-b_force_x, -b_force_y)
 
+def win():
+    if ballon.position_y >= 103:
+        if ballon.position_x >= 140 and ballon.position_x <= 150:
+            pyxel.text(70, 50, "Well Done!", pyxel.frame_count % 16)
 
 def update():
     ballon_control()
     sp.update(dt)
  
 def draw():
-    pyxel.cls(7)
+    pyxel.cls(pyxel.COLOR_BLACK)
+
+    # Draw bodies
+    sp.draw()
 
     # Print force and velocity for user 
     show_force(force)
     show_velocity(ballon.velocity_x, ballon.velocity_y)
 
-    # Draw bodies
-    sp.draw()
-
+    win()
 
 pyxel.run(update, draw)
