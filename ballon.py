@@ -55,32 +55,47 @@ def show_velocity(vx, vy):
     pyxel.text(150, 7, "y:"+y, 0)    
 
 
+switch = False
+
 def ballon_control():
-    global force
+    global switch, force
+
     # Add force for each dt
-    if (pyxel.btn(pyxel.KEY_UP) or
-       pyxel.btn(pyxel.KEY_DOWN) or  
-       pyxel.btn(pyxel.KEY_LEFT) or 
-       pyxel.btn(pyxel.KEY_RIGHT)):
-        
-        force += 1
+    if (pyxel.btnp(pyxel.KEY_UP, period=20) or
+       pyxel.btnp(pyxel.KEY_DOWN, period=20) or  
+       pyxel.btnp(pyxel.KEY_LEFT, period=20) or 
+       pyxel.btnp(pyxel.KEY_RIGHT, period=20)):
+
+        if not switch:
+            force += 50
+        else:
+            force -=50
+
+        if force == 650 or force == -50:
+            switch = not switch
+            ballon_control()
+
 
     #  Apply force based on the arrow key
     if pyxel.btnr(pyxel.KEY_UP):
         ballon.apply_force(0, -force)
         force = 0
+        switch = False
 
     if pyxel.btnr(pyxel.KEY_DOWN):
         ballon.apply_force(0, force)
         force = 0
+        switch = False
 
     if pyxel.btnr(pyxel.KEY_LEFT):
         ballon.apply_force(-force, 0)
         force = 0
+        switch = False
 
     if pyxel.btnr(pyxel.KEY_RIGHT):
         ballon.apply_force(force, 0)
         force = 0
+        switch = False
 
     #Handbrake 
     if pyxel.btn(pyxel.KEY_SPACE):
